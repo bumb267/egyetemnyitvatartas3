@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumen Tudományegyetem – Központi Könyvtár & Időpontfoglalás</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #818cf8;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --bg-dark: #0f172a;
+      --bg-card: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+      --radius: 18px;
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 40px -10px rgba(79, 70, 229, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: var(--text-main);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* HEADER & HERO */
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--bg-dark);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--gradient);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: #ecfdf5;
+      color: var(--success);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid #a7f3d0;
+    }
+
+    .status-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* HERO SZEKCIÓ 1. KÉPPEL */
+    .hero {
+      position: relative;
+      min-height: 460px;
+      display: flex;
+      align-items: center;
+      color: white;
+      padding: 4rem 1.5rem;
+      overflow: hidden;
+    }
+
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.35);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #ffffff, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      max-width: 600px;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-tag {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* TARTALOM ÉS GRID */
+    .main-container {
+      max-width: 1200px;
+      margin: -50px auto 4rem auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 950px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid #e2e8f0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--bg-dark);
+    }
+
+    .card-title i {
+      color: var(--primary);
+    }
+
+    /* 2. KÉP - KÁRTYA BANNER */
+    .feature-image-card {
+      padding: 0;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      border: none;
+    }
+
+    .feature-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .feature-content {
+      padding: 1.25rem 1.5rem;
+      background: white;
+    }
+
+    /* HETI NYITVATARTÁS LISTA */
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .schedule-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      border-left: 4px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .schedule-row:hover {
+      background: #f1f5f9;
+    }
+
+    .schedule-row.active {
+      background: #eef2ff;
+      border-left-color: var(--primary);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .schedule-row .day {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .schedule-row.weekend {
+      opacity: 0.8;
+      color: #94a3b8;
+    }
+
+    /* KÖNYVTÁRI RÉSZLEGEK KÁRTYÁK */
+    .zones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 1.5rem;
+    }
+
+    .zone-box {
+      padding: 14px;
+      border-radius: 14px;
+      background: #faf5ff;
+      border: 1px solid #f3e8ff;
+    }
+
+    .zone-box h4 {
+      font-size: 0.95rem;
+      color: #7e22ce;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .zone-box p {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    /* NAPTÁR ÉS FOGLALÓ RÉSZ */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .calendar-nav-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      color: var(--text-main);
+      transition: 0.2s;
+    }
+
+    .calendar-nav-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+      border: 1px solid #f1f5f9;
+    }
+
+    .cal-day:hover:not(.disabled) {
+      background: #eef2ff;
+      border-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .cal-day.selected {
+      background: var(--primary) !important;
+      color: white !important;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    }
+
+    .cal-day.disabled {
+      color: #cbd5e1;
+      cursor: not-allowed;
+      background: #f8fafc;
+    }
+
+    /* 3. KÉP - INFÓ KÁRTYA A FOGLALÁS MELLETT */
+    .booking-split {
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 1rem;
+      align-items: center;
+      background: #fdf4ff;
+      padding: 1rem;
+      border-radius: 14px;
+      margin: 1.5rem 0;
+      border: 1px solid #fae8ff;
+    }
+
+    .booking-split img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    /* ŰRLAP ELEMEK */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.95rem;
+      background: white;
+      transition: 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    .time-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      background: #f1f5f9;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .chip.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: transform 0.2s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+
+    /* MODÁLIS ABLAK A SIKERES FOGLALÁSHOZ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-card {
+      background: white;
+      max-width: 440px;
+      width: 100%;
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      text-align: center;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 1; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      background: #dcfce7;
+      color: var(--success);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem auto;
+    }
+
+    .modal-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-close {
+      background: var(--bg-dark);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FEJLÉC -->
+  <header>
+    <nav>
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <div>LUMEN EGYETEM</div>
+          <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Központi Könyvtár & Tudásközpont</div>
+        </div>
+      </a>
+      <div class="status-badge">
+        <span class="dot"></span> Jelenleg nyitva: 22:00-ig
+      </div>
+    </nav>
+  </header>
+
+  <!-- 1. KÉP: HERO BANNER -->
+  <section class="hero">
+    <img 
+      class="hero-img" 
+      src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80" 
+      alt="Lumen Egyetem Főkönyvtár Tágas Csarnoka"
+    >
+    <div class="hero-content">
+      <h1>Ahol a tudás fénnyé válik.</h1>
+      <p>Több mint 250 000 kötet, csendes tanulófülkék, digitális kutatólaborok és modern közösségi terek a Lumen Egyetem szívében.</p>
+      <div class="hero-tags">
+        <div class="hero-tag"><i class="fa-solid fa-wifi"></i> Gigabit Wi-Fi 6</div>
+        <div class="hero-tag"><i class="fa-solid fa-mug-hot"></i> Lumen Diákkávézó</div>
+        <div class="hero-tag"><i class="fa-solid fa-cube"></i> VR Kutatóállomás</div>
+        <div class="hero-tag"><i class="fa-solid fa-plug"></i> Minden asztalnál gyorstöltő</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FŐ TARTALOM (2 HASÁB) -->
+  <main class="main-container">
+    <div class="grid-layout">
+      
+      <!-- BAL OSZLOP: NYITVATARTÁS & INFÓK -->
+      <div>
+        
+        <!-- 2. KÉP: A KÖNYVTÁR CSENDES ÖVEZETE -->
+        <div class="card feature-image-card">
+          <img 
+            class="feature-img" 
+            src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80" 
+            alt="Hallgatók tanulnak a fényárban úszó galérián"
+          >
+          <div class="feature-content">
+            <h4 style="color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Böngéssz & Alkoss</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Természetes fénnyel teli olvasógalériánk a hét minden napján inspiráló környezetet biztosít.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <i class="fa-regular fa-clock"></i>
+            <h3>Heti Nyitvatartás</h3>
+          </div>
+
+          <div class="schedule-list">
+            <div class="schedule-row" id="day-1">
+              <span class="day"><i class="fa-regular fa-calendar-check"></i> Hétfő</span>
+              <span>08:00 – 22:00</span>
+            </div>
+            <div class="schedule-row" id="day-2">
+              <span class="day"><i class="fa-regular fa-calendar-check"></i> Kedd</span>
+              <span>08:00 – 22:00</span>
+            </div>
+            <div class="schedule-row" id="day-3">
+              <span class="day"><i class="fa-regular fa-calendar-check"></i> Szerda</span>
+              <span>08:00 – 22:00</span>
+            </div>
+            <div class="schedule-row" id="day-4">
+              <span class="day"><i class="fa-regular fa-calendar-check"></i> Csütörtök</span>
+              <span>08:00 – 22:00</span>
+            </div>
+            <div class="schedule-row" id="day-5">
+              <span class="day"><i class="fa-regular fa-calendar-check"></i> Péntek</span>
+              <span>08:00 – 20:00</span>
+            </div>
+            <div class="schedule-row weekend" id="day-6">
+              <span class="day"><i class="fa-regular fa-calendar"></i> Szombat</span>
+              <span>10:00 – 18:00</span>
+            </div>
+            <div class="schedule-row weekend" id="day-0">
+              <span class="day"><i class="fa-regular fa-calendar"></i> Vasárnap</span>
+              <span>10:00 – 16:00 (Csak olvasóterem)</span>
+            </div>
+          </div>
+
+          <div class="zones-grid">
+            <div class="zone-box">
+              <h4><i class="fa-solid fa-volume-xmark"></i> Csendes Zóna</h4>
+              <p>Minden nap 24 órában kártyás belépéssel elérhető diákjainknak.</p>
+            </div>
+            <div class="zone-box" style="background: #e0f2fe; border-color: #bae6fd;">
+              <h4 style="color: #0284c7;"><i class="fa-solid fa-headset"></i> Digitális Kölcsönzés</h4>
+              <p>Laptopok, hangfelvevők és e-könyv olvasók ingyenesen a pultnál.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- JOBB OSZLOP: NAPTÁR ÉS IDŐPONTFOGLALÓ -->
+      <div class="card" id="booking">
+        <div class="card-title">
+          <i class="fa-solid fa-calendar-days"></i>
+          <h3>Hely- és Időpontfoglalás</h3>
+        </div>
+
+        <!-- 3. KÉP: PRIVÁT TANULÓSZOBÁK HANGULATKÉPE -->
+        <div class="booking-split">
+          <div>
+            <h4 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--bg-dark);">Egyéni vagy csoportos térre vágysz?</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Válaszd ki a naptárban a kívánt napot és idősávot a zavartalan tanuláshoz!</p>
+          </div>
+          <img 
+            src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80" 
+            alt="Könyvek és csendes kuckó"
+          >
+        </div>
+
+        <!-- INTERAKTÍV NAPTÁR -->
+        <div class="calendar-header">
+          <button class="calendar-nav-btn" onclick="prevMonth()"><i class="fa-solid fa-chevron-left"></i></button>
+          <h4 id="monthYearDisplay" style="font-weight: 700;">Hónap betöltése...</h4>
+          <button class="calendar-nav-btn" onclick="nextMonth()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="weekdays">
+          <div>H</div><div>K</div><div>Sze</div><div>Cs</div><div>P</div><div>Szo</div><div>V</div>
+        </div>
+
+        <div class="calendar-days" id="calendarDays">
+          <!-- JS generálja dinamikusan -->
+        </div>
+
+        <!-- FOGLALÁSI ŰRLAP -->
+        <form id="bookingForm" onsubmit="handleBooking(event)" style="margin-top: 2rem;">
+          <div class="form-group">
+            <label><i class="fa-solid fa-clock"></i> Választott Idősáv</label>
+            <div class="time-chips" id="timeChips">
+              <span class="chip active" onclick="selectTime(this)">09:00 – 11:00</span>
+              <span class="chip" onclick="selectTime(this)">11:30 – 13:30</span>
+              <span class="chip" onclick="selectTime(this)">14:00 – 16:00</span>
+              <span class="chip" onclick="selectTime(this)">16:30 – 18:30</span>
+              <span class="chip" onclick="selectTime(this)">19:00 – 21:00</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="roomType"><i class="fa-solid fa-door-open"></i> Helyiség vagy Szolgáltatás Típusa</label>
+            <select id="roomType" class="form-control" required>
+              <option value="Egyéni akusztikus fülke (1 fő)">Egyéni akusztikus tanulófülke (1 fő)</option>
+              <option value="Csoportos projektterem (2-6 fő)">Csoportos projektterem (2-6 fő, digitális tábla)</option>
+              <option value="VR & Multimédia Kutatóállomás">VR & Multimédia Kutatóállomás</option>
+              <option value="Szakdolgozati mentor konzultáció">Szakdolgozati mentor konzultáció</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="userName"><i class="fa-solid fa-user"></i> Teljes Név</label>
+              <input type="text" id="userName" class="form-control" placeholder="Pl. Horváth Dániel" required>
+            </div>
+            <div class="form-group">
+              <label for="userCode"><i class="fa-solid fa-id-card"></i> Diákigazolvány / Neptun</label>
+              <input type="text" id="userCode" class="form-control" placeholder="Pl. LUM123" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <i class="fa-solid fa-check"></i> Időpont Véglegesítése
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SIKERES FOGLALÁS MODAL -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3>Foglalás Elfogadva!</h3>
+      <p id="modalDetails">A visszaigazolást elküldtük az egyetemi e-mail címedre. Kérjük, érkezz pontosan!</p>
+      <button class="btn-close" onclick="closeModal()">Rendben, köszönöm!</button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT: LOGIKA & INTERAKTIVITÁS -->
+  <script>
+    // Mai nap kiemelése a heti rendben
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date().getDay();
+      const currentDayRow = document.getElementById(`day-${today}`);
+      if(currentDayRow) {
+        currentDayRow.classList.add("active");
+        currentDayRow.title = "Ma van";
+      }
+      renderCalendar();
+    });
+
+    let currentDate = new Date();
+    let selectedDate = new Date();
+    let selectedTimeSlot = "09:00 – 11:00";
+
+    const monthNames = [
+      "Január", "Február", "Március", "Április", "Május", "Június", 
+      "Július", "Augusztus", "Szeptember", "Október", "November", "December"
+    ];
+
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      document.getElementById("monthYearDisplay").innerText = `${year}. ${monthNames[month]}`;
+
+      const firstDayIndex = new Date(year, month, 1).getDay();
+      let startingDay = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
+
+      const lastDay = new Date(year, month + 1, 0).getDate();
+      const calDaysContainer = document.getElementById("calendarDays");
+      calDaysContainer.innerHTML = "";
+
+      // Hónap előtti üres napok
+      for (let i = 0; i < startingDay; i++) {
+        const emptyDiv = document.createElement("div");
+        calDaysContainer.appendChild(emptyDiv);
+      }
+
+      const now = new Date();
+      now.setHours(0,0,0,0);
+
+      // Napok generálása
+      for (let day = 1; day <= lastDay; day++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("cal-day");
+        dayDiv.innerText = day;
+
+        const dayDate = new Date(year, month, day);
+
+        if (dayDate < now) {
+          dayDiv.classList.add("disabled");
+        } else {
+          if (
+            dayDate.getFullYear() === selectedDate.getFullYear() &&
+            dayDate.getMonth() === selectedDate.getMonth() &&
+            dayDate.getDate() === selectedDate.getDate()
+          ) {
+            dayDiv.classList.add("selected");
+          }
+
+          dayDiv.onclick = () => {
+            selectedDate = dayDate;
+            renderCalendar();
+          };
+        }
+
+        calDaysContainer.appendChild(dayDiv);
+      }
+    }
+
+    function prevMonth() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    }
+
+    function nextMonth() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    }
+
+    function selectTime(chipElement) {
+      document.querySelectorAll('.time-chips .chip').forEach(c => c.classList.remove('active'));
+      chipElement.classList.add('active');
+      selectedTimeSlot = chipElement.innerText;
+    }
+
+    function handleBooking(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("userName").value;
+      const room = document.getElementById("roomType").value;
+      const formattedDate = `${selectedDate.getFullYear()}. ${monthNames[selectedDate.getMonth()]} ${selectedDate.getDate()}.`;
+
+      const details = `Kedves <b>${name}</b>! A foglalásod rögzítettük a <b>Lumen Könyvtár</b> rendszerében:<br><br>
+        📅 <b>Dátum:</b> ${formattedDate}<br>
+        ⏰ <b>Idősáv:</b> ${selectedTimeSlot}<br>
+        📍 <b>Tér / Szolgáltatás:</b> ${room}`;
+
+      document.getElementById("modalDetails").innerHTML = details;
+      document.getElementById("successModal").style.display = "grid";
+    }
+
+    function closeModal() {
+      document.getElementById("successModal").style.display = "none";
+      document.getElementById("bookingForm").reset();
+    }
+  </script>
+</body>
+</html>
